@@ -13,6 +13,12 @@ MVC架构，单Activity+多Fragment
 原生控件+shape
 几个主要图标
 
+![1]
+
+![2]
+
+![3]
+
 ### 功能
 音乐播放
 
@@ -33,3 +39,8 @@ MVC架构，单Activity+多Fragment
 
 ### License
 MIT License
+
+
+[1]:http://image.coolapk.com/apk_image/2017/0722/Screenshot_20170722-224454-for-151371-o_1blle8lm51vka17r1sfmkgp1ian15-uid-778419.jpg
+[2]:http://image.coolapk.com/apk_image/2017/0722/Screenshot_20170722-224505-for-151371-o_1blle8lm517d0dg81bjsoo6122417-uid-778419.jpg
+[3]:http://image.coolapk.com/apk_image/2017/0722/Screenshot_20170722-224452-for-151371-o_1blle8lm5mf277ki7phmo123214-uid-778419.jpg
