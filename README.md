@@ -37,6 +37,9 @@ MVC架构，单Activity+多Fragment
 ### 待添加功能
 看情况
 
+<a target="_blank" href="//shang.qq.com/wpa/qunwpa?idkey=11b47a08c42516d9f3685f7a54ee1b1197786fc03734e45f8f02aa54311f6f33"><img border="0" src="//pub.idqqimg.com/wpa/images/group.png" alt="Rair修仙开发交流" title="Rair修仙开发交流"></a>
+
+
 ### License
 MIT License
 
