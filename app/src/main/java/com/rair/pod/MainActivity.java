@@ -92,14 +92,17 @@ public class MainActivity extends AppCompatActivity {
             case R.id.main_iv_play:
                 intent.putExtra(Constants.ACTION_KEY, Constants.ACTION_PLAY);
                 break;
+            default:
+                break;
         }
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     public void showFragment(int currentIndex) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        if (currentIndex == lastIndex)
+        if (currentIndex == lastIndex) {
             return;
+        }
         if (lastIndex != -1) {
             ft.hide(fragments[lastIndex]);
         }
@@ -119,6 +122,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case 4:
                     fragments[currentIndex] = PlayerFragment.newInstance();
+                    break;
+                default:
                     break;
             }
             ft.add(R.id.main_fl_container, fragments[currentIndex]);
