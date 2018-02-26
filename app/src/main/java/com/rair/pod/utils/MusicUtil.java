@@ -56,13 +56,13 @@ public class MusicUtil {
         String mUriAlbums = "content://media/external/audio/albums";
         String[] projection = new String[]{"album_art"};
         Cursor cursor = context.getContentResolver().query(Uri.parse(mUriAlbums + "/" + album_id), projection, null, null, null);
-        String album_art = null;
+        String albumArt = null;
         if (cursor.getCount() > 0 && cursor.getColumnCount() > 0) {
             cursor.moveToNext();
-            album_art = cursor.getString(0);
+            albumArt = cursor.getString(0);
         }
         cursor.close();
-        return album_art;
+        return albumArt;
     }
 
     /**

@@ -23,9 +23,14 @@ public class MusicService extends Service {
 
     private final IBinder mBinder = new LocalBinder();
     private Context context;
-    /* MediaPlayer对象 */
+    /**
+     * MediaPlayer对象
+     */
     private MediaPlayer mMediaPlayer;
-    private int currentTime = 0;//歌曲播放进度
+    /**
+     * 歌曲播放进度
+     */
+    private int currentTime = 0;
     private int currentItem = -1;//当前播放第几首歌
     private ArrayList<Music> songs;//要播放的歌曲集合
 

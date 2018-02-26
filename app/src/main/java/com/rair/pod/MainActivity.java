@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
-            case 400:  // 这个400就是传入的数字。
+            case 400:
                 mainTvPermission.setText("欢迎使用...");
                 handler.postDelayed(new Runnable() {
                     @Override
