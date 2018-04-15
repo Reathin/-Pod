@@ -55,9 +55,6 @@
 }
 
 # 确保JavaBean不被混淆-否则gson将无法将数据解析成具体对象
--keep class * extends cn.bmob.v3.BmobObject {
-    *;
-}
 -keep class com.rair.pod.bean.** { *; }
 
 -keepclassmembers class ** {
