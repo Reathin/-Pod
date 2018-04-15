@@ -53,13 +53,9 @@ public class MusicService extends Service {
      */
     public void playMusic(String path) {
         try {
-            /* 重置MediaPlayer */
             mMediaPlayer.reset();
-            /* 设置要播放的文件的路径 */
             mMediaPlayer.setDataSource(path);
-            /* 准备播放 */
             mMediaPlayer.prepare();
-            /* 开始播放 */
             mMediaPlayer.start();
             mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -178,11 +174,8 @@ public class MusicService extends Service {
         this.songs = songs;
     }
 
-    /**
-     * 自定义绑定Service类，通过这里的getService得到Service，
-     * 之后就可调用Service这里的方法了
-     */
     public class LocalBinder extends Binder {
+
         public MusicService getService() {
             return MusicService.this;
         }
