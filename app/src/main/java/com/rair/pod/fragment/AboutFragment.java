@@ -1,6 +1,7 @@
 package com.rair.pod.fragment;
 
 
+import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -58,6 +59,7 @@ public class AboutFragment extends Fragment {
         initView();
     }
 
+    @SuppressLint("HandlerLeak")
     private void initView() {
         register();
         handler = new Handler() {
@@ -69,12 +71,14 @@ public class AboutFragment extends Fragment {
                         musicService.pausePlay();
                         break;
                     case 1:
-                        if (musicService.isPlay())
+                        if (musicService.isPlay()) {
                             musicService.prevMusic();
+                        }
                         break;
                     case 2:
-                        if (musicService.isPlay())
+                        if (musicService.isPlay()) {
                             musicService.nextMusic();
+                        }
                         break;
                     case 3:
                         MainActivity activity = (MainActivity) getActivity();
@@ -82,6 +86,8 @@ public class AboutFragment extends Fragment {
                         break;
                     case 4:
                         musicService.pausePlay();
+                        break;
+                    default:
                         break;
                 }
             }
@@ -134,6 +140,8 @@ public class AboutFragment extends Fragment {
                 case Constants.ACTION_PLAY:
                     message.what = 4;
                     break;
+                default:
+                    break;
             }
             handler.sendMessage(message);
         }
@@ -143,8 +151,11 @@ public class AboutFragment extends Fragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (hidden) broadcastManager.unregisterReceiver(receiver);
-        else register();
+        if (hidden) {
+            broadcastManager.unregisterReceiver(receiver);
+        } else {
+            register();
+        }
     }
 
     @Override

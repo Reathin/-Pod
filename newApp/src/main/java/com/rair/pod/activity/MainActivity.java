@@ -1,25 +1,26 @@
-package com.rair.pod;
+package com.rair.pod.activity;
 
-import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.rair.pod.R;
+import com.rair.pod.base.BaseActivity;
 import com.rair.pod.event.MenuEvent;
 import com.rair.pod.event.NextEvent;
 import com.rair.pod.event.OkEvent;
 import com.rair.pod.event.PlayEvent;
 import com.rair.pod.event.PrevEvent;
+import com.yanzhenjie.permission.AndPermission;
+import com.yanzhenjie.permission.Permission;
 
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.yokeyword.fragmentation.SupportActivity;
 
-public class MainActivity extends SupportActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.fl_container)
     FrameLayout flContainer;
@@ -37,10 +38,17 @@ public class MainActivity extends SupportActivity {
     ImageView ivPlay;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+    public void initView() {
+
+    }
+
+    @Override
+    public void initData() {
+        if (!AndPermission.hasPermission(this, Permission.STORAGE)) {
+
+        } else {
+
+        }
     }
 
     @OnClick({R.id.iv_ok, R.id.iv_prev, R.id.iv_next, R.id.iv_menu, R.id.iv_play})
@@ -64,5 +72,15 @@ public class MainActivity extends SupportActivity {
             default:
                 break;
         }
+    }
+
+    @Override
+    public int getLayoutId() {
+        return R.layout.activity_main;
+    }
+
+    @Override
+    public Object newP() {
+        return null;
     }
 }

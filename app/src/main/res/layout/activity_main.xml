@@ -6,7 +6,7 @@
     android:background="@drawable/shape_pod_skin"
     android:orientation="vertical"
     android:padding="20dp"
-    tools:context="com.rair.pod.MainActivity">
+    tools:context="com.rair.pod.activity.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"

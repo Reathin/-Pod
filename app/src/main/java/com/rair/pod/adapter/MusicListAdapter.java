@@ -50,8 +50,8 @@ public class MusicListAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.view_music_item, parent, false);
-            holder.tvSong = (TextView) convertView.findViewById(R.id.music_item_tv_song);
-            holder.tvDuration = (TextView) convertView.findViewById(R.id.music_item_tv_duration);
+            holder.tvSong = convertView.findViewById(R.id.music_item_tv_song);
+            holder.tvDuration = convertView.findViewById(R.id.music_item_tv_duration);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
