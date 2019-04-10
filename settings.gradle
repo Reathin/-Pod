@@ -1,1 +1,1 @@
-include ':app', ':newApp'
+include ':module_app', ':module_pod2'
