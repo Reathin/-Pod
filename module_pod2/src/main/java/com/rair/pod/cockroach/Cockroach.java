@@ -5,11 +5,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 
-import com.rair.andmvp.cockroach.compat.ActivityKillerV15_V20;
-import com.rair.andmvp.cockroach.compat.ActivityKillerV21_V23;
-import com.rair.andmvp.cockroach.compat.ActivityKillerV24_V25;
-import com.rair.andmvp.cockroach.compat.ActivityKillerV26;
-import com.rair.andmvp.cockroach.compat.IActivityKiller;
+import com.rair.pod.cockroach.compat.ActivityKillerV15_V20;
+import com.rair.pod.cockroach.compat.ActivityKillerV21_V23;
+import com.rair.pod.cockroach.compat.ActivityKillerV24_V25;
+import com.rair.pod.cockroach.compat.ActivityKillerV26;
+import com.rair.pod.cockroach.compat.IActivityKiller;
 
 import java.lang.reflect.Field;
 

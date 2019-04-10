@@ -1,5 +1,6 @@
 package com.rair.pod.activity;
 
+import android.os.Bundle;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -38,7 +39,7 @@ public class MainActivity extends BaseActivity {
     ImageView ivPlay;
 
     @Override
-    public void initView() {
+    public void initView(Bundle savedInstanceState) {
 
     }
 
@@ -77,6 +78,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public int getLayoutId() {
         return R.layout.activity_main;
+    }
+
+    @Override
+    public int getOptionMenuId() {
+        return 0;
     }
 
     @Override
