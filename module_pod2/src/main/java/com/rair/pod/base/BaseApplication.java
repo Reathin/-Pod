@@ -4,14 +4,14 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
-import android.graphics.Color;
+import android.content.Intent;
+import android.support.annotation.ColorRes;
 
+import com.rair.pod.cockroach.Cockroach;
+import com.rair.pod.cockroach.ExceptionHandler;
 import com.rair.pod.utils.AppUtils;
-import com.rair.pod.utils.SPUtils;
 import com.socks.library.KLog;
-import com.wanjian.cockroach.Cockroach;
 
-import java.io.IOException;
 import java.util.Stack;
 
 import es.dmoral.toasty.Toasty;
@@ -25,36 +25,77 @@ import es.dmoral.toasty.Toasty;
 
 public class BaseApplication extends Application {
 
-    private static BaseApplication sInstance;
+    private static BaseApplication instance;
+    /**
+     * Activity堆栈
+     */
     private Stack<Activity> activityStack;
-    protected boolean isDebug = true;
 
-    public static BaseApplication getIns() {
-        return sInstance;
+    public static BaseApplication getInstance() {
+        return instance;
     }
 
     @Override
     public void onCreate() {
         super.onCreate();
-        sInstance = this;
+        instance = this;
         AppUtils.init(this);
-        SPUtils.getInstance();
-        //初始化log日志
-        KLog.init(isDebug, "Rair");
-        //初始化Toasty
-        Toasty.Config.getInstance().setInfoColor(Color.parseColor("#32353a")).apply();
-        //全局捕获异常
-        Cockroach.install((thread, throwable) -> {
-            try {
-                KLog.e(AppUtils.getErrorInfo(throwable));
-            } catch (IOException e) {
-                KLog.e(e.getMessage());
+        KLog.init(true,"Rair");
+    }
+
+    /**
+     * 初始化日志
+     *
+     * @param isDebug isDebug
+     * @param tag     tag
+     */
+    protected void initLog(boolean isDebug, String tag) {
+        KLog.init(isDebug, tag);
+    }
+
+    /**
+     * 初始化toasty
+     *
+     * @param colorId 颜色
+     */
+    protected void initToast(@ColorRes int colorId) {
+        Toasty.Config.getInstance().setInfoColor(AppUtils.getColor(colorId)).apply();
+    }
+
+    /**
+     * 初始化 全局异常上报
+     * <p>
+     * Crash 异常处理
+     */
+    protected void initCrashHandler() {
+        Cockroach.install(new ExceptionHandler() {
+            @Override
+            protected void onUncaughtExceptionHappened(Thread thread, Throwable throwable) {
+                KLog.w("onUncaughtExceptionHappened:" + AppUtils.getErrorInfo(throwable));
+            }
+
+            @Override
+            protected void onBandageExceptionHappened(Throwable throwable) {
+                KLog.w("onBandageExceptionHappened:" + AppUtils.getErrorInfo(throwable));
+            }
+
+            @Override
+            protected void onEnterSafeMode() {
+                KLog.w("onEnterSafeMode");
+            }
+
+            @Override
+            protected void onMayBeBlackScreen(Throwable e) {
+                super.onMayBeBlackScreen(e);
+                KLog.w("onMayBeBlackScreen:" + AppUtils.getErrorInfo(e));
             }
         });
     }
 
     /**
      * 添加指定Activity到堆栈
+     *
+     * @param activity Activity
      */
     public void addActivity(Activity activity) {
         if (activityStack == null) {
@@ -65,36 +106,41 @@ public class BaseApplication extends Application {
 
     /**
      * 获取当前Activity
+     *
+     * @return who extends Activity
      */
     public Activity currentActivity() {
         return activityStack.lastElement();
     }
 
     /**
-     * 结束当前Activity
+     * 结束Activity
+     * <p>
+     * 栈中最上面那个  弹出栈
      */
     public void finishActivity() {
         Activity activity = activityStack.lastElement();
-        if (activity == null) {
-            return;
-        } else {
+        if (activity != null) {
             finishActivity(activity);
         }
     }
 
     /**
      * 结束指定的Activity
+     *
+     * @param activity who extends Activity
      */
     public void finishActivity(Activity activity) {
         if (activity != null) {
             activityStack.remove(activity);
             activity.finish();
-            activity = null;
         }
     }
 
     /**
      * 结束指定Class的Activity
+     *
+     * @param cls 例如：MainActivity.class
      */
     public void finishActivity(Class<?> cls) {
         for (Activity activity : activityStack) {
@@ -107,29 +153,44 @@ public class BaseApplication extends Application {
 
     /**
      * 结束全部的Activity
+     * <p>
+     * 将Activity 的所有Activity 进行finish();
      */
     public void finishAllActivity() {
-        for (int i = 0, size = activityStack.size(); i < size; i++) {
-            if (null != activityStack.get(i)) {
-                activityStack.get(i).finish();
+        for (Activity activity : activityStack) {
+            if (null != activity) {
+                activity.finish();
             }
         }
         activityStack.clear();
     }
 
     /**
+     * 重启应用
+     */
+    public void restartApplication() {
+        Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+        if (intent != null) {
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+        } else {
+            exitApplication();
+        }
+    }
+
+    /**
      * 退出应用程序
      */
-    public void exitApp(Context context) {
+    public void exitApplication() {
         try {
             finishAllActivity();
-            ActivityManager activityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
             if (activityManager != null) {
-                activityManager.killBackgroundProcesses(context.getPackageName());
+                activityManager.killBackgroundProcesses(getPackageName());
             }
             System.exit(0);
         } catch (Exception e) {
-            KLog.e("app exit" + e.getMessage());
+            KLog.e("退出App异常:" + e.getMessage());
         }
     }
 }

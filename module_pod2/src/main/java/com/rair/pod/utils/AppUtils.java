@@ -9,8 +9,10 @@ import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.provider.Settings;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -82,6 +84,16 @@ public class AppUtils {
     }
 
     /**
+     * 全局获取color的方法
+     *
+     * @param colorId 资源ID
+     * @return color
+     */
+    public static int getColor(@ColorRes int colorId) {
+        return ContextCompat.getColor(context, colorId);
+    }
+
+    /**
      * 获取androidId
      *
      * @return
@@ -131,48 +143,17 @@ public class AppUtils {
         return getPackageInfo(context).versionName;
     }
 
-    /**
-     * 震动200毫秒
-     */
-    public static void vibrate(Activity activity) {
-        Vibrator vibrator = (Vibrator) activity.getSystemService(VIBRATOR_SERVICE);
-        if (vibrator == null) {
-            return;
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            VibrationEffect vibrationEffect = VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE);
-            vibrator.vibrate(vibrationEffect);
-        } else {
-            vibrator.vibrate(200);
-        }
-    }
 
     /**
      * 获取异常信息在程序中出错的位置及原因
      */
-    public static String getErrorInfo(Throwable throwable) throws IOException {
+    public static String getErrorInfo(Throwable throwable) {
         StringWriter writer = new StringWriter();
         PrintWriter pw = new PrintWriter(writer);
         throwable.printStackTrace(pw);
         pw.close();
-        String error = writer.toString();
-        writer.close();
-        return error;
+        return writer.toString();
     }
-
-//    /**
-//     * 图片压缩
-//     *
-//     * @param file             要压缩的图片文件
-//     * @param compressListener 结果监听
-//     */
-//    public static void compressPic(File file, OnCompressListener compressListener) {
-//        Luban.with(AppUtils.getContext())
-//                .load(file)
-//                .ignoreBy(200)
-//                .setCompressListener(compressListener)
-//                .launch();
-//    }
 
     /**
      * 随机生成字符串(nonce)
@@ -183,7 +164,7 @@ public class AppUtils {
         //生成字符串从此序列中取
         String base = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = random.nextInt(base.length());
             sb.append(base.charAt(number));

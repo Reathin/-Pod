@@ -26,6 +26,18 @@ public final class SPUtils {
 
     private static SimpleArrayMap<String, SPUtils> SP_UTILS_MAP = new SimpleArrayMap<>();
     private SharedPreferences sp;
+    private static String spName;
+
+    /**
+     * 获取SP实例
+     *
+     * @return {@link SPUtils}
+     */
+    public static SPUtils init(String spName) {
+        SPUtils.spName = spName;
+        return getInstance();
+    }
+
 
     /**
      * 获取SP实例
@@ -33,18 +45,8 @@ public final class SPUtils {
      * @return {@link SPUtils}
      */
     public static SPUtils getInstance() {
-        return getInstance("");
-    }
-
-    /**
-     * 获取SP实例
-     *
-     * @param spName sp名
-     * @return {@link SPUtils}
-     */
-    private static SPUtils getInstance(String spName) {
         if (isSpace(spName)) {
-            spName = "yoju";
+            spName = "default_share_pref";
         }
         SPUtils spUtils = SP_UTILS_MAP.get(spName);
         if (spUtils == null) {
@@ -61,9 +63,8 @@ public final class SPUtils {
     /**
      * 写入对象
      *
-     * @param key
-     * @param object
-     * @return
+     * @param key    key
+     * @param object object
      */
     public boolean putObject(String key, Object object) {
         if (object == null) {
@@ -95,8 +96,7 @@ public final class SPUtils {
     /**
      * 读取对象
      *
-     * @param key
-     * @return
+     * @param key key
      */
     public Object getObject(String key) {
         try {

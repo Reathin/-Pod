@@ -1,5 +1,7 @@
 package com.rair.pod.base;
 
+import java.lang.ref.WeakReference;
+
 /**
  *
  * @author aill
@@ -8,40 +10,30 @@ package com.rair.pod.base;
 
 public class BasePresent<V extends IView> implements IPresent<V> {
 
-    private V v;
-//    private CompositeDisposable mCompositeDisposable;
+    private WeakReference<V> v;
 
     @Override
     public void attachV(V view) {
-        v = view;
+        v = new WeakReference<>(view);
     }
 
     @Override
     public void detachV() {
+        if (v.get() != null) {
+            v.clear();
+        }
         v = null;
-//        dispose();
     }
 
     protected V getV() {
-        if (v == null) {
-            throw new IllegalStateException("V不能为空");
+        if (v == null || v.get() == null) {
+            throw new IllegalStateException("V不能为空！");
         }
-        return v;
+        return v.get();
     }
 
-//    public void addDisposable(Disposable disposable) {
-//        if (mCompositeDisposable == null) {
-//            mCompositeDisposable = new CompositeDisposable();
-//        }
-//        mCompositeDisposable.add(disposable);
-//    }
-//
-//    /**
-//     * 取消订阅
-//     */
-//    private void dispose() {
-//        if (mCompositeDisposable != null) {
-//            mCompositeDisposable.dispose();
-//        }
-//    }
+    @Override
+    public boolean hasV() {
+        return v != null && v.get() != null;
+    }
 }

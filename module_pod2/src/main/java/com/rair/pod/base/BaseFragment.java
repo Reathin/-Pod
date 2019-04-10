@@ -1,5 +1,7 @@
 package com.rair.pod.base;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,24 +25,31 @@ import me.yokeyword.fragmentation.SupportFragment;
 public abstract class BaseFragment<P extends IPresent> extends SupportFragment implements IView<P> {
 
     private P p;
+    protected Activity context;
     private View rootView;
     private Unbinder unbinder;
 
     @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        if (rootView == null) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        if (rootView == null && getLayoutId() > 0) {
             rootView = inflater.inflate(getLayoutId(), container, false);
+            bindUI(rootView);
         } else {
             ViewGroup viewGroup = (ViewGroup) rootView.getParent();
             if (viewGroup != null) {
                 viewGroup.removeView(rootView);
             }
         }
-        bindUI(rootView);
-        initView();
         return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        getP();
+        initView(savedInstanceState);
+        initData();
     }
 
     @Override
@@ -48,25 +57,30 @@ public abstract class BaseFragment<P extends IPresent> extends SupportFragment i
         unbinder = ButterKnife.bind(this, rootView);
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initData();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-    }
-
     protected P getP() {
         if (p == null) {
             p = newP();
-            if (p != null) {
+        }
+        if (p != null) {
+            if (!p.hasV()) {
                 p.attachV(this);
             }
         }
         return p;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof Activity) {
+            this.context = (Activity) context;
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        context = null;
     }
 
     @Override
@@ -79,14 +93,12 @@ public abstract class BaseFragment<P extends IPresent> extends SupportFragment i
         unbinder.unbind();
     }
 
-    private Toast toast;
-
-    public void showToast(String msg) {
-        if (toast != null) {
-            toast.cancel();
-            toast = null;
-        }
-        toast = Toasty.info(AppUtils.getContext(), msg, Toast.LENGTH_SHORT);
-        toast.show();
+    /**
+     * 显示toasty
+     *
+     * @param text 提示信息
+     */
+    public void showToasty(String text) {
+        Toasty.info(AppUtils.getContext(), text, Toast.LENGTH_SHORT, false).show();
     }
 }

@@ -6,7 +6,7 @@ import android.os.Build;
  * @Description:主要功能:andoid 版本工具，用于判断当前版本是否大于某个版本
  */
 
-public class AndroidVersionUtil {
+public class VersionUtils {
     /**
      * 是否在2.2版本及以上
      *
@@ -111,5 +111,13 @@ public class AndroidVersionUtil {
      */
     public static boolean isN(){
         return  Build.VERSION.SDK_INT >=  Build.VERSION_CODES.N;
+    }
+
+    /**
+     * 是否在8.0版本及以上
+     * @return 是否在8.0版本及以上
+     */
+    public static boolean isO(){
+        return  Build.VERSION.SDK_INT >=  Build.VERSION_CODES.O;
     }
 }
